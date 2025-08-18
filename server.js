@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 const app = express();
 app.use(
   cors({
-    origin: "https://sito-palestra-lilac.vercel.app",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
