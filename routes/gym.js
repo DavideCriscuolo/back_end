@@ -6,6 +6,9 @@ import verifyUser from "./../middleware/verifyUser.js";
 import { uploadScheda } from "../middleware/configMulter.js";
 
 const router = express.Router();
+router.get("/", (req, res) => {
+  res.send("Backend attivo 🚀");
+});
 
 router.get("/user/:email", verifyToken, verifyUser, gymController.showEmail);
 router.get("/admin_showProfileUser/:id", gymController.showProfileUser);
