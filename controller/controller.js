@@ -11,6 +11,7 @@ dotenv.config();
 
 // Importa il modulo 'path' di Node.js per creare percorsi compatibili su tutti i sistemi operativi
 import path from "path";
+import e from "express";
 
 export const index = (req, res) => {
   const sql = "SELECT * FROM iscritti;";
@@ -99,13 +100,11 @@ export const loginAdmin = (req, res) => {
 
   connection.query(sql, [email], (err, results) => {
     if (err || results.length === 0) {
-      return res
-        .status(401)
-        .json({
-          message: "Credenziali errate",
-          err: err.message,
-          password: password,
-        });
+      return res.status(401).json({
+        message: "Credenziali errate",
+        err: err.message,
+        password: password,
+      });
     }
 
     const user = results[0];
@@ -113,7 +112,9 @@ export const loginAdmin = (req, res) => {
     console.log(user.password, "password nel db");
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
-        return res.status(500).json({ message: "Errore server" });
+        return res
+          .status(500)
+          .json({ message: "Errore server", err: err.message });
       }
       if (!isMatch) {
         return res.status(401).json({ message: "Password errata" });
