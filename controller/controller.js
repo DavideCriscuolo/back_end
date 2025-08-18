@@ -139,7 +139,9 @@ export const loginAdmin = (req, res) => {
           .json({ message: "Errore server", err: err.message });
       }
       if (!isMatch) {
-        return res.status(401).json({ message: "Password errata" });
+        return res
+          .status(401)
+          .json({ message: "Password errata", err: err.message });
       }
 
       const token = jwt.sign(
