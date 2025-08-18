@@ -113,46 +113,71 @@ export const showEmail = (req, res) => {
 };
 export const loginAdmin = (req, res) => {
   const { email, password } = req.body;
+  console.log("Richiesta login admin:", {
+    email,
+    password: password ? "****" : null,
+  });
+
   const sql = "SELECT * FROM admin_gym WHERE `email` = ?;";
 
   connection.query(sql, [email], (err, results) => {
-    if (err || results.length === 0) {
-      return res.status(401).json({
-        message: "Credenziali errate",
-        err: err ? err.message : undefined,
-        // password: password, // NON RESTITUIRE LA PASSWORD
-      });
+    if (err) {
+      console.error("Errore query DB:", err);
+      return res
+        .status(500)
+        .json({ message: "Errore server DB", err: err.message });
+    }
+
+    if (!results || results.length === 0) {
+      console.log("Nessun utente trovato con email:", email);
+      return res.status(401).json({ message: "Credenziali errate" });
     }
 
     const user = results[0];
+    console.log("Utente trovato:", {
+      id: user.id,
+      email: user.email,
+      passwordStored: user.password ? "****" : null,
+    });
+
     if (typeof user.password !== "string" || !user.password) {
+      console.log("Password non valida nel DB:", user.password);
       return res
         .status(500)
         .json({ message: "Password non valida nel database" });
     }
-    console.log(password, "password inserita");
-    console.log(user.password, "password nel db");
+
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
+        console.error("Errore bcrypt.compare:", err);
         return res
           .status(500)
-          .json({ message: "Errore server", err: err.message });
-      }
-      if (!isMatch) {
-        return res
-          .status(401)
-          .json({ message: "Password errata", err: err.message });
+          .json({ message: "Errore server bcrypt", err: err.message });
       }
 
-      const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      res.json({ token });
+      if (!isMatch) {
+        console.log("Password errata per utente:", email);
+        return res.status(401).json({ message: "Password errata" });
+      }
+
+      console.log("Password corretta, generazione token per utente:", email);
+      try {
+        const token = jwt.sign(
+          { id: user.id, email: user.email, role: user.role },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+        res.json({ token });
+      } catch (tokenErr) {
+        console.error("Errore generazione token JWT:", tokenErr);
+        return res
+          .status(500)
+          .json({ message: "Errore server JWT", err: tokenErr.message });
+      }
     });
   });
 };
+
 export const login = (req, res) => {
   const { email, password } = req.body;
   const sql = "SELECT * FROM iscritti WHERE `email` = ?;";
