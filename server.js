@@ -14,8 +14,9 @@ const port = process.env.PORT || 5000;
 const app = express();
 app.use(
   cors({
-    origin: "*",
+    origin: "https://sito-palestra-lilac.vercel.app", // il tuo frontend su Vercel
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // solo se vuoi usare cookie o auth
   })
 );
 
