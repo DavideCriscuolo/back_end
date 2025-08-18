@@ -12,8 +12,14 @@ const __dirname = path.dirname(__filename);
 const port = process.env.PORT || 5000;
 
 const app = express();
+app.use(
+  cors({
+    origin: "https://sito-palestra-lilac.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use("/gym", gymRouter);
