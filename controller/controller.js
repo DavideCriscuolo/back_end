@@ -13,6 +13,23 @@ dotenv.config();
 import path from "path";
 import e from "express";
 
+// Test temporaneo di bcrypt
+const testPassword = "test123";
+bcrypt.hash(testPassword, 10, (err, hash) => {
+  if (err) {
+    console.error("Errore bcrypt hash:", err);
+  } else {
+    console.log("Hash generato:", hash);
+    bcrypt.compare(testPassword, hash, (err, result) => {
+      if (err) {
+        console.error("Errore bcrypt compare:", err);
+      } else {
+        console.log("Risultato compare:", result); // Deve essere true
+      }
+    });
+  }
+});
+
 export const index = (req, res) => {
   const sql = "SELECT * FROM iscritti;";
 
