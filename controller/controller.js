@@ -99,8 +99,13 @@ export const loginAdmin = (req, res) => {
 
   connection.query(sql, [email], (err, results) => {
     if (err || results.length === 0) {
-      console.log(password, "password inserita");
-      return res.status(401).json({ message: "Credenziali errate" });
+      return res
+        .status(401)
+        .json({
+          message: "Credenziali errate",
+          err: err.message,
+          password: password,
+        });
     }
 
     const user = results[0];
