@@ -102,12 +102,17 @@ export const loginAdmin = (req, res) => {
     if (err || results.length === 0) {
       return res.status(401).json({
         message: "Credenziali errate",
-        err: err.message,
-        password: password,
+        err: err ? err.message : undefined,
+        // password: password, // NON RESTITUIRE LA PASSWORD
       });
     }
 
     const user = results[0];
+    if (typeof user.password !== "string" || !user.password) {
+      return res
+        .status(500)
+        .json({ message: "Password non valida nel database" });
+    }
     console.log(password, "password inserita");
     console.log(user.password, "password nel db");
     bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -139,6 +144,11 @@ export const login = (req, res) => {
     }
 
     const user = results[0];
+    if (typeof user.password !== "string" || !user.password) {
+      return res
+        .status(500)
+        .json({ message: "Password non valida nel database" });
+    }
     console.log(password, "password inserita");
     console.log(user.password, "password nel db");
     bcrypt.compare(password, user.password, (err, isMatch) => {
