@@ -456,17 +456,24 @@ export const uploadaSchedaDB = (req, res) => {
 
     if (!file) return res.status(400).json({ error: "Nessun file caricato" });
 
-    // Salva il buffer nel DB
+    // file.buffer è già un Buffer, perfetto per LONGBLOB
+    console.log("File ricevuto:", {
+      nome: file.originalname,
+      tipo: file.mimetype,
+      size: file.size,
+      bufferType: typeof file.buffer,
+    });
+
     const sql = "UPDATE info_iscritti SET scheda_pdf = ? WHERE id_iscritto = ?";
-    connection.query(sql, [file.buffer, id], (err, results) => {
+    connection.query(sql, [Buffer.from(file.buffer), id], (err, results) => {
       if (err) {
-        console.error(err);
+        console.error("Query error:", err);
         return res.status(500).json({ error: "Errore salvataggio DB" });
       }
       res.json({ message: "Scheda salvata nel DB!" });
     });
   } catch (err) {
-    console.error(err);
+    console.error("Catch error:", err);
     res.status(500).json({ error: "Errore server" });
   }
 };
