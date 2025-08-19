@@ -466,7 +466,7 @@ export const uploadaSchedaDB = (req, res) => {
       bufferLength: file.buffer.length,
     });
 
-    const sql = "UPDATE info_iscritti SET scheda_pdf = ? WHERE id_iscritto = ?";
+    const sql = "UPDATE info_iscritti SET scheda = ? WHERE id_iscritto = ?";
     connection.query(sql, [file.buffer, id], (err, results) => {
       if (err) {
         console.error("Query error:", err);
