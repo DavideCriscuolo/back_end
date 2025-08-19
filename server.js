@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 app.use(
   "/uploads/schede",
-  express.static(path.join(process.cwd(), "server/uploads/schede"))
+  express.static(path.join(process.cwd(), "uploads/schede"))
 );
 
 // Middleware
