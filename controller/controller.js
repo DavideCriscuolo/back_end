@@ -437,6 +437,7 @@ export const scheda = (req, res) => {
   // Crea il percorso completo del file sul disco
   // process.cwd() = cartella in cui sta girando il server
   // path.join(...) concatena i pezzi del percorso in modo sicuro
+
   const filePath = path.join(
     process.cwd(),
     "uploads",
