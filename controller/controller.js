@@ -434,52 +434,41 @@ export const store = (req, res) => {
 };
 
 export const scheda = (req, res) => {
-  try {
-    const filePath = path.join(
-      process.cwd(),
-      "uploads",
-      "schede",
-      req.params.fileName
-    );
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: "File non trovato" });
-    }
-
-    // Invia il file al client
-    res.sendFile(filePath, { headers: { "Content-Type": "application/pdf" } });
-  } catch (err) {
-    console.error("Errore scheda:", err);
-    res.status(500).json({ message: "Errore nel server" });
-  }
-};
-export const uploadaScheda = (req, res) => {
-  console.log("req.file:", req.file);
-  console.log("req.body:", req.body);
-  // Controllo file
-  if (!req.file) {
-    return res.status(400).json({ error: "Nessun file caricato" });
-  }
-
-  const filename = req.file.filename;
   const id = req.params.id;
 
-  // Aggiorna il DB
-  connection.query(
-    "UPDATE info_iscritti SET scheda = ? WHERE id_iscritto = ?",
-    [filename, id],
-    (err, results) => {
+  const sql = "SELECT scheda_pdf FROM info_iscritti WHERE id_iscritto = ?";
+  connection.query(sql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Errore DB" });
+    if (!results[0] || !results[0].scheda_pdf) {
+      return res.status(404).json({ error: "Scheda non trovata" });
+    }
+
+    const fileBuffer = results[0].scheda_pdf;
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(fileBuffer);
+  });
+};
+export const uploadaSchedaDB = (req, res) => {
+  try {
+    const file = req.file;
+    const id = req.params.id;
+
+    if (!file) return res.status(400).json({ error: "Nessun file caricato" });
+
+    // Salva il buffer nel DB
+    const sql = "UPDATE info_iscritti SET scheda_pdf = ? WHERE id_iscritto = ?";
+    connection.query(sql, [file.buffer, id], (err, results) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ error: "Errore salvataggio DB" });
       }
-
-      res.json({
-        message: "File caricato e salvato in DB!",
-        filename,
-      });
-    }
-  );
+      res.json({ message: "Scheda salvata nel DB!" });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Errore server" });
+  }
 };
 
 // Funzione per inviare email di reset password
