@@ -436,19 +436,23 @@ export const store = (req, res) => {
 export const scheda = (req, res) => {
   const id = req.params.id;
 
-  const sql = "SELECT scheda_pdf FROM info_iscritti WHERE id_iscritto = ?";
+  const sql = "SELECT scheda FROM info_iscritti WHERE id_iscritto = ?";
   connection.query(sql, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: "Errore DB" });
-    if (!results[0] || !results[0].scheda_pdf) {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Errore DB" });
+    }
+    if (!results[0] || !results[0].scheda) {
       return res.status(404).json({ error: "Scheda non trovata" });
     }
 
-    const fileBuffer = results[0].scheda_pdf;
+    const fileBuffer = results[0].scheda;
 
     res.setHeader("Content-Type", "application/pdf");
     res.send(fileBuffer);
   });
 };
+
 export const uploadaSchedaDB = (req, res) => {
   try {
     const file = req.file;
