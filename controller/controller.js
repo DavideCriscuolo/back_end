@@ -442,13 +442,12 @@ export const scheda = (req, res) => {
       req.params.fileName
     );
 
-    // Controlla se il file esiste
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ message: "File non trovato" });
     }
 
     // Invia il file al client
-    res.sendFile(filePath);
+    res.sendFile(filePath, { headers: { "Content-Type": "application/pdf" } });
   } catch (err) {
     console.error("Errore scheda:", err);
     res.status(500).json({ message: "Errore nel server" });

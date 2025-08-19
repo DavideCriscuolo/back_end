@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import gymRouter from "./routes/gym.js";
 import connection from "./db/connection.js";
-import path from "path";
+
 const app = express();
 const port = process.env.PORT || 5000;
 
