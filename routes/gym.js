@@ -6,7 +6,7 @@ import verifyUser from "./../middleware/verifyUser.js";
 import { uploadScheda } from "../middleware/configMulter.js";
 
 const router = express.Router();
-router.get("/", (req, res) => {
+router.get("/test-server", (req, res) => {
   res.send("Backend attivo 🚀");
 });
 
