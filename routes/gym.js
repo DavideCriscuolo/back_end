@@ -21,7 +21,7 @@ router.post("/login", gymController.login);
 router.post("/login/admin", gymController.loginAdmin);
 router.get("/profile", verifyToken, gymController.profile);
 router.post("/register", gymController.register);
-router.get("/schede/:id", verifyToken, gymController.scheda);
+router.get("/schede/:id_iscritto", verifyToken, gymController.scheda);
 router.post("/reset-password", gymController.resetPassword);
 router.post("/request-reset", gymController.requestReset);
 router.delete("/deleteUser/:id", gymController.deleteUser);

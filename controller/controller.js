@@ -44,8 +44,8 @@ export const index = (req, res) => {
   });
 };
 export const showProfileUser = (req, res) => {
-  const id_iscritto = req.params.id;
-  console.log("req.params.id:", req.params.id);
+  const id_iscritto = req.params.id_iscritto;
+  console.log("req.params.id:", req.params.id_iscritto);
 
   const sql =
     "SELECT * FROM iscritti LEFT JOIN `info_iscritti` ON `info_iscritti`.`id_iscritto` = `iscritti`.`id` WHERE `id_iscritto` = ? ";
