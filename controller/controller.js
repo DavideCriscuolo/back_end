@@ -48,7 +48,8 @@ export const showProfileUser = (req, res) => {
   console.log("req.params.id:", req.params.id);
 
   const sql =
-    "SELECT * FROM iscritti LEFT JOIN `info_iscritti` ON `info_iscritti`.`id_iscritto` = `iscritti`.`id` WHERE `id` = ? ";
+    "SELECT * FROM iscritti LEFT JOIN `info_iscritti` ON `info_iscritti`.`id_iscritto` = `iscritti`.`id` WHERE `iscritti`.`id` = ?";
+
   connection.query(sql, [id_iscritto], (err, results) => {
     if (err) {
       return res.status(500).json({
@@ -66,6 +67,7 @@ export const showProfileUser = (req, res) => {
     return res.json(results[0]);
   });
 };
+
 export const show = (req, res) => {
   const id = Number(req.params.id);
   console.log("req.params.id:", req.params.id);
