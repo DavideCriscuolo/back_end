@@ -4,7 +4,7 @@ import path from "path";
 // Configurazione storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "server/uploads/schede/"); // cartella dove salvare i file
+    cb(null, "uploads/schede/"); // cartella dove salvare i file
   },
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + path.extname(file.originalname);
