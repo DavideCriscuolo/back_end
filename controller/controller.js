@@ -434,10 +434,10 @@ export const store = (req, res) => {
 };
 
 export const scheda = (req, res) => {
-  const id = req.params.id;
+  const id_iscritto = req.params.id;
 
   const sql = "SELECT scheda FROM info_iscritti WHERE id_iscritto = ?";
-  connection.query(sql, [id], (err, results) => {
+  connection.query(sql, [id_iscritto], (err, results) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Errore DB" });
