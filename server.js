@@ -4,9 +4,14 @@ import dotenv from "dotenv";
 dotenv.config();
 import gymRouter from "./routes/gym.js";
 import connection from "./db/connection.js";
-
+import path from "path";
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(
+  "/uploads/schede",
+  express.static(path.join(process.cwd(), "server/uploads/schede"))
+);
 
 // Middleware
 app.use(
