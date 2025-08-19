@@ -436,7 +436,7 @@ export const store = (req, res) => {
 };
 
 export const scheda = (req, res) => {
-  const id_iscritto = req.params.id;
+  const id_iscritto = req.params.id_iscritto; // <-- qui
 
   const sql = "SELECT scheda FROM info_iscritti WHERE id_iscritto = ?";
   connection.query(sql, [id_iscritto], (err, results) => {
