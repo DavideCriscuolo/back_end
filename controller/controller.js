@@ -434,25 +434,25 @@ export const store = (req, res) => {
 };
 
 export const scheda = (req, res) => {
-  // Crea il percorso completo del file sul disco
-  // process.cwd() = cartella in cui sta girando il server
-  // path.join(...) concatena i pezzi del percorso in modo sicuro
+  try {
+    const filePath = path.join(
+      process.cwd(),
+      "uploads",
+      "schede",
+      req.params.fileName
+    );
 
-  const filePath = path.join(
-    process.cwd(),
-    "uploads",
-    "schede",
-    req.params.fileName
-  );
+    // Controlla se il file esiste
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "File non trovato" });
+    }
 
-  // Controlla se il file esiste davvero nella cartella
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ message: "File non trovato" });
+    // Invia il file al client
+    res.sendFile(filePath);
+  } catch (err) {
+    console.error("Errore scheda:", err);
+    res.status(500).json({ message: "Errore nel server" });
   }
-
-  // Se esiste, invia il file al client
-  // res.sendFile legge il file e lo spedisce come risposta HTTP
-  res.sendFile(filePath);
 };
 export const uploadaScheda = (req, res) => {
   console.log("req.file:", req.file);
