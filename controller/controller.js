@@ -63,7 +63,7 @@ export const showProfileUser = (req, res) => {
         err: "Iscritto non trovato",
       });
     }
-    console.log(results[0]);
+
     return res.json(results[0]);
   });
 };
@@ -79,7 +79,6 @@ export const show = (req, res) => {
         err: err.message,
       });
     }
-    console.log(results);
 
     if (results.length === 0) {
       return res.status(404).json({
