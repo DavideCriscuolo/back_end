@@ -194,8 +194,8 @@ export const login = (req, res) => {
         .status(500)
         .json({ message: "Password non valida nel database" });
     }
-    console.log(password, "password inserita");
-    console.log(user.password, "password nel db");
+    // console.log(password, "password inserita");
+    // console.log(user.password, "password nel db");
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
         return res.status(500).json({ message: "Errore server" });
@@ -239,7 +239,7 @@ export const register = (req, res) => {
         [nome, cognome, email, hash],
         (err2, result) => {
           if (err2) {
-            console.error("Errore inserimento:", err2);
+            // console.error("Errore inserimento:", err2);
             return res.status(500).json({ message: "Errore inserimento" });
           }
 
@@ -512,7 +512,8 @@ export const requestReset = async (req, res) => {
     // Esegui la query
     connection.query(sql, [token, scadenzaToken, email], (err, results) => {
       if (err) {
-        console.error(err);
+        console.log(err);
+        console.log(email, token, scadenzaToken);
         return res
           .status(500)
           .json({ error: "Errore durante il salvataggio del token" });
