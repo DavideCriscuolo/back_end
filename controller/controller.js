@@ -522,7 +522,7 @@ export const requestReset = async (req, res) => {
       }
 
       // Prepara il link per il reset
-      const resetLink = `http://localhost:5173/reset-password/${token}`;
+      const resetLink = `https://sito-palestra-lilac.vercel.app/reset-password/${token}`;
 
       // Prepara l'email
       const msg = {
