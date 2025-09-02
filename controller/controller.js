@@ -19,7 +19,7 @@ bcrypt.hash(testPassword, 10, (err, hash) => {
   if (err) {
     console.error("Errore bcrypt hash:", err);
   } else {
-    console.log("Hash generato:", hash);
+    //console.log("Hash generato:", hash);
     bcrypt.compare(testPassword, hash, (err, result) => {
       if (err) {
         console.error("Errore bcrypt compare:", err);
@@ -39,7 +39,7 @@ export const index = (req, res) => {
         err: err.message,
       });
     }
-    console.log(results);
+    //console.log(results);
     res.json(results);
   });
 };
@@ -56,7 +56,7 @@ export const showProfileUser = (req, res) => {
         err: err.message,
       });
     }
-    console.log(results);
+    //console.log(results);
 
     if (results.length === 0) {
       return res.status(404).json({
@@ -70,7 +70,7 @@ export const showProfileUser = (req, res) => {
 
 export const show = (req, res) => {
   const id = Number(req.params.id);
-  console.log("req.params.id:", req.params.id);
+  //console.log("req.params.id:", req.params.id);
 
   const sql = "SELECT * FROM iscritti WHERE `id` = ?;";
   connection.query(sql, [id], (err, results) => {
@@ -85,13 +85,13 @@ export const show = (req, res) => {
         err: "Iscritto non trovato",
       });
     }
-    console.log(results[0]);
+    //console.log(results[0]);
     return res.json(results[0]);
   });
 };
 export const showEmail = (req, res) => {
   const email = req.params.email;
-  console.log("req.params.email:", req.params.email);
+  //console.log("req.params.email:", req.params.email);
 
   const sql =
     "SELECT * FROM iscritti LEFT JOIN `info_iscritti` ON `info_iscritti`.`id_iscritto` = `iscritti`.`id` WHERE `email` = ? ";
@@ -101,14 +101,14 @@ export const showEmail = (req, res) => {
         err: err.message,
       });
     }
-    console.log(results);
+    //console.log(results);
 
     if (results.length === 0) {
       return res.status(404).json({
         err: "Iscritto non trovato",
       });
     }
-    console.log(results[0]);
+    //onsole.log(results[0]);
     return res.json(results[0]);
   });
 };
@@ -130,7 +130,7 @@ export const loginAdmin = (req, res) => {
     }
 
     if (!results || results.length === 0) {
-      console.log("Nessun utente trovato con email:", email);
+      //console.log("Nessun utente trovato con email:", email);
       return res.status(401).json({ message: "Credenziali errate" });
     }
 
@@ -142,7 +142,7 @@ export const loginAdmin = (req, res) => {
     });
 
     if (typeof user.password !== "string" || !user.password) {
-      console.log("Password non valida nel DB:", user.password);
+      //console.log("Password non valida nel DB:", user.password);
       return res
         .status(500)
         .json({ message: "Password non valida nel database" });
@@ -157,11 +157,11 @@ export const loginAdmin = (req, res) => {
       }
 
       if (!isMatch) {
-        console.log("Password errata per utente:", email);
+        //console.log("Password errata per utente:", email);
         return res.status(401).json({ message: "Password errata" });
       }
 
-      console.log("Password corretta, generazione token per utente:", email);
+      //console.log("Password corretta, generazione token per utente:", email);
       try {
         const token = jwt.sign(
           { id: user.id, email: user.email, role: user.role },
@@ -270,8 +270,8 @@ export const profile = (req, res) => {
 
 export const update = (req, res) => {
   const id_iscritto = Number(req.params.id);
-  console.log("BODY RICEVUTO:", req.body);
-  console.log("ID ISCRITTO:", id_iscritto);
+  //console.log("BODY RICEVUTO:", req.body);
+  //console.log("ID ISCRITTO:", id_iscritto);
 
   const spalle = Number(req.body.spalle);
   const petto = Number(req.body.petto);
@@ -347,8 +347,8 @@ export const update = (req, res) => {
 };
 export const store = (req, res) => {
   const id_iscritto = Number(req.params.id);
-  console.log("BODY RICEVUTO:", req.body);
-  console.log("ID ISCRITTO:", id_iscritto);
+  // console.log("BODY RICEVUTO:", req.body);
+  //console.log("ID ISCRITTO:", id_iscritto);
 
   const spalle = req.body.spalle !== "" ? Number(req.body.spalle) : null;
   const petto = req.body.petto !== "" ? Number(req.body.petto) : null;
@@ -463,13 +463,13 @@ export const uploadaSchedaDB = (req, res) => {
       return res.status(400).json({ error: "Nessun file caricato" });
     }
 
-    console.log("File ricevuto:", {
-      nome: file.originalname,
-      tipo: file.mimetype,
-      size: file.size,
-      isBuffer: Buffer.isBuffer(file.buffer),
-      bufferLength: file.buffer.length,
-    });
+    // console.log("File ricevuto:", {
+    //   nome: file.originalname,
+    //   tipo: file.mimetype,
+    //   size: file.size,
+    //   isBuffer: Buffer.isBuffer(file.buffer),
+    //   bufferLength: file.buffer.length,
+    // });
 
     const sql = "UPDATE info_iscritti SET scheda = ? WHERE id_iscritto = ?";
     connection.query(sql, [file.buffer, id], (err, results) => {
@@ -492,7 +492,7 @@ export const requestReset = async (req, res) => {
   try {
     // Imposta la chiave API di SendGrid
     sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-    console.log(process.env.SENDGRID_API_KEY);
+    // console.log(process.env.SENDGRID_API_KEY);
 
     const { email } = req.body;
 
@@ -512,11 +512,9 @@ export const requestReset = async (req, res) => {
     // Esegui la query
     connection.query(sql, [token, scadenzaToken, email], (err, results) => {
       if (err) {
-        console.log(err);
-        console.log(email, token, scadenzaToken);
-        return res
-          .status(500)
-          .json({ error: "Errore durante il salvataggio del token" });
+        //  console.log(err);
+        //  console.log(email, token, scadenzaToken);
+        return res.status(500).json({ error: err.message });
       }
 
       if (results.affectedRows === 0) {
@@ -529,7 +527,7 @@ export const requestReset = async (req, res) => {
       // Prepara l'email
       const msg = {
         to: email,
-        from: "davide.alcatel@gmail.com",
+        from: "davide.alcatel2@gmail.com",
         subject: "Reset Password",
         text: `Clicca sul link per reimpostare la tua password: ${resetLink}`,
         html: `<p>Clicca sul link per reimpostare la tua password:</p>
@@ -542,7 +540,7 @@ export const requestReset = async (req, res) => {
         .then(() => res.json({ message: "Email di reset inviata" }))
         .catch((err) => {
           console.error(err);
-          console.log(email, token, scadenzaToken);
+
           res.status(500).json({ error: err.message });
         });
     });
@@ -612,7 +610,6 @@ export const deleteUser = (req, res) => {
   //cancelli in automatico i record figli quando elimini il genitore
   connection.query(sql, [id], (err, results) => {
     if (err) {
-      console.log(err);
       return res.status(500).json({ error: "Errore server" });
     }
     if (results.affectedRows === 0) {
