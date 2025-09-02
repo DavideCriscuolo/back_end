@@ -542,6 +542,7 @@ export const requestReset = async (req, res) => {
         .then(() => res.json({ message: "Email di reset inviata" }))
         .catch((err) => {
           console.error(err);
+          console.log(email, token, scadenzaToken);
           res.status(500).json({ error: err.message });
         });
     });
