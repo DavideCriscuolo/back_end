@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000;
 //     // credentials: true // solo se usi cookie
 //   })
 // );
-aao.use(cors());
+app.use(cors());
 app.use(express.json());
 
 // Route API
